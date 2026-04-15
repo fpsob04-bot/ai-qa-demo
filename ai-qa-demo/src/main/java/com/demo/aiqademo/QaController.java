@@ -16,9 +16,14 @@ public class QaController {
         this.repository = repository;
     }
 
+
     @PostMapping("/ask")
     public Map<String, Object> ask(@RequestBody Map<String, String> payload) {
         String question = payload.get("question");
+        // 新增校验逻辑
+        if (question == null || question.trim().isEmpty()) {
+            throw new IllegalArgumentException("问题不能为空");
+        }
         String answer = ollamaService.ask(question);
 
         QaRecord record = new QaRecord(question, answer);
